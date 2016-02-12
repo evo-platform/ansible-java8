@@ -1,0 +1,23 @@
+---
+- name: install dependency
+  apt: name=software-properties-common state=present
+
+- name: add oracle java repository
+  apt_repository: 
+    repo: "ppa:webupd8team/java"
+
+- name: accept oracle java 8 license
+  debconf: 
+    name: "oracle-java8-installer"
+    question: "shared/accepted-oracle-license-v1-1"
+    value: "true"
+    vtype: "select"
+
+- name: install oracle java 8
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - oracle-java8-installer
+    - ca-certificates
+    - oracle-java8-set-default
